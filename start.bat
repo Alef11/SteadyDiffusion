@@ -1,17 +1,17 @@
 @echo off
-echo Starting SteadyDiffusion...
+echo Starting DaddyDiffusion...
 echo.
 
 REM Start backend server in a new window
 echo Starting backend API server...
-start "SteadyDiffusion Backend" cmd /k "cd /d %~dp0 && python backend\main.py"
+start "DaddyDiffusion Backend" cmd /k "cd /d %~dp0 && python backend\main.py"
 
 REM Wait a moment for backend to initialize
 timeout /t 3 /nobreak > nul
 
 REM Start frontend server in a new window
 echo Starting frontend development server...
-start "SteadyDiffusion Frontend" cmd /k "cd /d %~dp0frontend && npm run dev"
+start "DaddyDiffusion Frontend" cmd /k "cd /d %~dp0frontend && npm run dev"
 
 REM Wait for frontend to start
 echo Waiting for servers to start...
@@ -22,7 +22,7 @@ echo Opening browser...
 start http://localhost:5173
 
 echo.
-echo SteadyDiffusion is running!
+echo DaddyDiffusion is running!
 echo Backend: http://localhost:8000
 echo Frontend: http://localhost:5173
 echo.

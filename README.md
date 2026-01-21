@@ -29,7 +29,7 @@ DaddyDiffusion wraps the Tongyi-MAI Z-Image-Turbo model in a clean, responsive w
 
 ```bash
 git clone <your-repo-url>
-cd SteadyDiffusion
+cd DaddyDiffusion
 ```
 
 ### Step 2: Set Up Python Environment

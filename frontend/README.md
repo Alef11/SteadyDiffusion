@@ -1,6 +1,6 @@
-﻿# SteadyDiffusion Frontend
+﻿# DaddyDiffusion Frontend
 
-Modern web interface for the SteadyDiffusion AI image generator, built with Vite, React, TypeScript, and shadcn/ui.
+Modern web interface for the DaddyDiffusion AI image generator, built with Vite, React, TypeScript, and shadcn/ui.
 
 ## Features
 
@@ -108,8 +108,10 @@ The primary color (#72195a) is configured in:
 
 ### Build Errors
 
-- Clear node_modules and reinstall: \m -rf node_modules && npm install\
-- Clear Vite cache: \m -rf node_modules/.vite\
+- Clear node_modules and reinstall: \
+m -rf node_modules && npm install\
+- Clear Vite cache: \
+m -rf node_modules/.vite\
 
 ## Technologies
 
