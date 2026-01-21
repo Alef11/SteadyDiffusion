@@ -1,6 +1,10 @@
 fastapi
 uvicorn
 torch
-diffusers
+torchvision
+torchaudio
+git+https://github.com/huggingface/diffusers
+transformers
+accelerate
 pydantic
 pillow

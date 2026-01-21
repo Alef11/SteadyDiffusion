@@ -80,8 +80,16 @@ pip install -r requirements.txt
    ```
 
 4. **Install remaining dependencies:**
+   
+   **Important:** Z-Image-Turbo requires diffusers to be installed from source (not PyPI).
+   
    ```bash
-   pip install fastapi uvicorn diffusers transformers accelerate
+   pip install git+https://github.com/huggingface/diffusers transformers accelerate fastapi uvicorn pydantic pillow
+   ```
+   
+   Or simply use the requirements file:
+   ```bash
+   pip install -r requirements.txt
    ```
 
 ### Step 3: Set Up Frontend
@@ -135,6 +143,15 @@ Then open your browser to [http://localhost:5173](http://localhost:5173)
 4. **Download** - Save your masterpiece!
 
 ## Troubleshooting
+
+### AutoTokenizer Import Error
+
+If you see `RuntimeError: Failed to import diffusers.pipelines.z_image.pipeline_z_image` with `Could not import module 'AutoTokenizer'`:
+
+**Solution:**
+1. Make sure `transformers` is installed: `pip install transformers`
+2. Ensure you installed diffusers from source (not PyPI): `pip install git+https://github.com/huggingface/diffusers`
+3. If issues persist, reinstall all dependencies: `pip install -r requirements.txt --force-reinstall`
 
 ### CUDA/GPU Issues
 
