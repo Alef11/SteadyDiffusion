@@ -1,121 +1,222 @@
-# SteadyDiffusion
+﻿# DaddyDiffusion
 
-A FastAPI-based image generation service using Z-Image-Turbo diffusion model with asynchronous job processing.
+A fun quick project for using Z-Image-Turbo and making it more accessible! DaddyDiffusion provides a modern web interface for the powerful Z-Image-Turbo AI model, allowing you to generate stunning images with an easy-to-use interface.
+
+## About
+
+DaddyDiffusion wraps the Tongyi-MAI Z-Image-Turbo model in a clean, responsive web application. Generate AI images in seconds with real-time status updates, dark/light mode, and a beautiful UI powered by React and shadcn/ui.
 
 ## Features
 
-- Asynchronous image generation using threading
-- Job tracking with SQLite database
-- RESTful API with status monitoring
-- Automatic image organization by date
+-  **Modern Web Interface** - Clean, responsive design that works on any device
+-  **Fast Generation** - Powered by Z-Image-Turbo for quick results
+-  **Dark/Light Mode** - Toggle themes with persistent preference
+-  **Real-time Updates** - Live status monitoring during generation
+-  **Easy Downloads** - One-click image downloads
+-  **Parameter Control** - Adjust width, height, and inference steps
+-  **Health Monitoring** - Always know if your API is responsive
 
-## Setup
+## Prerequisites
 
-1. Install dependencies:
+- **CUDA-compatible GPU** (NVIDIA graphics card with CUDA support)
+- **Python 3.9+** installed
+- **Node.js 18+** installed
+- **Git** (optional, for cloning)
+
+## Installation Guide
+
+### Step 1: Clone or Download the Project
+
+```bash
+git clone <your-repo-url>
+cd SteadyDiffusion
+```
+
+### Step 2: Set Up Python Environment
+
+**Important:** Depending on your GPU and CUDA version, you may need to install PyTorch with specific CUDA compatibility.
+
+#### Option A: Quick Install (if compatible)
+
 ```bash
 pip install -r requirements.txt
 ```
 
-2. Run the server:
+#### Option B: Custom PyTorch Installation (Recommended for GPU compatibility)
+
+1. **Create a virtual environment:**
+   ```bash
+   python -m venv venv
+   
+   # On Windows:
+   venv\Scripts\activate
+   
+   # On Linux/Mac:
+   source venv/bin/activate
+   ```
+
+2. **Check your CUDA version:**
+   ```bash
+   nvidia-smi
+   ```
+   Look for "CUDA Version" in the output (e.g., CUDA 11.8, 12.1, etc.)
+
+3. **Install PyTorch, torchvision, and torchaudio:**
+   
+   Visit [https://pytorch.org/get-started/locally/](https://pytorch.org/get-started/locally/) and select:
+   - Your OS (Windows/Linux/Mac)
+   - Package Manager: pip
+   - Language: Python
+   - Compute Platform: Your CUDA version
+   
+   Copy the generated command and run it. For example:
+   
+   ```bash
+   # CUDA 11.8 example:
+   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+   
+   # CUDA 12.1 example:
+   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
+   ```
+
+4. **Install remaining dependencies:**
+   ```bash
+   pip install fastapi uvicorn diffusers transformers accelerate
+   ```
+
+### Step 3: Set Up Frontend
+
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+### Step 4: Initialize Database
+
+The database will be created automatically on first run, or you can initialize it manually:
+
+```bash
+cd backend/database
+python dbconnector.py
+cd ../..
+```
+
+### Step 5: Run the Application
+
+**Easy Way - Use the batch file (Windows):**
+```bash
+start.bat
+```
+
+**Manual Way:**
+
+Terminal 1 - Backend:
 ```bash
 python backend/main.py
 ```
 
-The server will start on `http://localhost:8000`
+Terminal 2 - Frontend:
+```bash
+cd frontend
+npm run dev
+```
+
+Then open your browser to [http://localhost:5173](http://localhost:5173)
+
+## Usage
+
+1. **Enter a Prompt** - Describe the image you want to generate
+2. **Set Parameters:**
+   - Width: 512-2048px
+   - Height: 512-2048px
+   - Inference Steps: 1-50 (9 is default and works great)
+3. **Click Generate** - Watch the loading animation
+4. **Download** - Save your masterpiece!
+
+## Troubleshooting
+
+### CUDA/GPU Issues
+
+If you get errors about CUDA not being available:
+- Make sure you have an NVIDIA GPU with CUDA support
+- Install the correct PyTorch version for your CUDA version (see Step 2B above)
+- Update your NVIDIA drivers: [https://www.nvidia.com/Download/index.aspx](https://www.nvidia.com/Download/index.aspx)
+
+### Out of Memory Errors
+
+If your GPU runs out of memory:
+- Reduce the image dimensions (try 512x512 or 768x768)
+- Close other GPU-intensive applications
+- Consider using a smaller batch size or fewer inference steps
+
+### Frontend Won'\''t Start
+
+```bash
+cd frontend
+rm -rf node_modules
+npm install
+npm run dev
+```
+
+### Backend API Errors
+
+Make sure all Python dependencies are installed:
+```bash
+pip install -r requirements.txt
+```
 
 ## API Endpoints
 
-### Health Check
-```
-GET /health
-```
-Returns the health status of the API.
+- `POST /generate-image` - Start image generation
+- `GET /status/{job_id}` - Check generation status
+- `GET /image/{job_id}` - Retrieve generated image
+- `GET /health` - API health check
 
-### Generate Image
-```
-POST /generate-image
-```
-Start an image generation job. Returns immediately with a job ID.
+## Technology Stack
 
-**Request Body:**
-```json
-{
-  "prompt": "a beautiful sunset over mountains",
-  "height": 1024,
-  "width": 1024,
-  "num_inference_steps": 9
-}
-```
+**Backend:**
+- FastAPI
+- Z-Image-Turbo (Tongyi-MAI)
+- PyTorch
+- SQLite
 
-**Response:**
-```json
-{
-  "job_id": "550e8400-e29b-41d4-a716-446655440000",
-  "image_name": "ImgGen_143022",
-  "status": "generating"
-}
-```
+**Frontend:**
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui
 
-### Check Job Status
-```
-GET /status/{job_id}
-```
-Get the current status and details of a generation job.
+## Project Structure
 
-**Response:**
-```json
-{
-  "job_id": "550e8400-e29b-41d4-a716-446655440000",
-  "image_name": "ImgGen_143022",
-  "status": "completed",
-  "prompt": "a beautiful sunset over mountains",
-  "height": 1024,
-  "width": 1024,
-  "num_inference_steps": 9,
-  "created_at": "2026-01-21T14:30:22.123456",
-  "completed_at": "2026-01-21T14:30:45.789012",
-  "error_message": null
-}
+```
+DaddyDiffusion/
+ backend/
+    main.py              # FastAPI server
+    api/                 # API endpoints
+    database/            # SQLite database
+    generator/           # Image generation logic
+    utils/               # Helper functions
+ frontend/
+    src/
+       components/      # React components
+       hooks/           # Custom hooks
+       lib/             # API client
+       types/           # TypeScript types
+    package.json
+ outputs/                 # Generated images
+ requirements.txt         # Python dependencies
+ start.bat               # Quick start script
 ```
 
-**Status values:**
-- `generating`: Image is being generated
-- `completed`: Image generation successful
-- `failed`: Image generation failed (check error_message)
+## License
 
-### Get Image by Job ID
-```
-GET /image/{job_id}
-```
-Download the generated image using the job ID. Returns 404 if job not found, or 400 if image is not ready yet.
+This is a fun quick project - feel free to use and modify as you like!
 
-### Get Image by Name
-```
-GET /image/by-name/{image_name}
-```
-Download the generated image using the image name (e.g., "ImgGen_143022").
+## Credits
 
-## Architecture
-
-- **FastAPI**: REST API framework
-- **Threading**: Asynchronous image generation
-- **SQLite**: Job tracking and status management
-- **Z-Image-Turbo**: Diffusion model for image generation
-
-## Output Structure
-
-Generated images are organized by date:
-```
-outputs/
-  20260121/
-    ImgGen_143022.png
-    ImgGen_143045.png
-  20260122/
-    ImgGen_091530.png
-```
-
-## Requirements
-
-- Python 3.8+
-- CUDA-capable GPU
-- FastAPI, uvicorn, torch, diffusers, pydantic, pillow
+Built with  using:
+- [Z-Image-Turbo](https://github.com/Tongyi-MAI/Z-Image-Turbo) by Tongyi-MAI
+- [shadcn/ui](https://ui.shadcn.com/)
+- [FastAPI](https://fastapi.tiangolo.com/)
